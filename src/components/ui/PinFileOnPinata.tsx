@@ -33,7 +33,7 @@ export const uploadToIpfs = async (
       const jsonMetadata = {
         name: "Edubuk Certificate NFT",
         description:
-          "This NFT represents a unique and verifiable certification of educational achievement in the education domain.",
+          "This NFT represents a unique and verifiable record of your academic and professional achievement securely registered on the Blockchain",
         image:
           "https://gateway.pinata.cloud/ipfs/bafkreiht6k6nbku5msadjocol4varmwykh67sjbhmfrbprqmqpse6lzk6u",
         hash: fileUploadResult.IpfsHash,
