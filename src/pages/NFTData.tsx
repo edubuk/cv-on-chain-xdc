@@ -14,9 +14,10 @@ interface NFT {
 interface NFTGalleryProps {
   contractAddress: string;
   abi: ethers.ContractInterface;
+  account:String;
 }
 
-const NFTGallery: React.FC<NFTGalleryProps> = ({ contractAddress, abi }) => {
+const NFTGallery: React.FC<NFTGalleryProps> = ({ contractAddress, abi,account }) => {
   const [nfts, setNfts] = useState<NFT[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -27,15 +28,15 @@ const NFTGallery: React.FC<NFTGalleryProps> = ({ contractAddress, abi }) => {
 
       // Connect to Ethereum using MetaMask
       const provider = new ethers.providers.Web3Provider((window as any).ethereum);
-      const account = await provider.send("eth_requestAccounts", []);
-      console.log("account",account[0]);
+      //await provider.send("eth_requestAccounts", []);
+      //console.log("account",account[0]);
       const signer = provider.getSigner();
 
       // Connect to the smart contract
       const contract = new ethers.Contract(contractAddress, abi, signer);
 
       // Fetch all token IDs from the contract
-      const tokenIds = (await contract.getTokenIds(account[0].toString())).map((id: ethers.BigNumber) =>
+      const tokenIds = (await contract.getTokenIds(account)).map((id: ethers.BigNumber) =>
         id.toString()
       );
       // Fetch metadata for each token ID
