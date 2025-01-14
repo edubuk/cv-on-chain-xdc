@@ -108,7 +108,7 @@ const DashBoard = () => {
             isActiveButton&&<CvById cvData={cvData}/>
           }
           {
-            isNFT&&<NFTGallery contractAddress={contractNFTAddress} abi={abiNFT}/>
+            isNFT&&<NFTGallery contractAddress={contractNFTAddress} abi={abiNFT} account={account}/>
           }
         </div>
     </div>

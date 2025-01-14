@@ -14,9 +14,10 @@ interface NFT {
 interface NFTGalleryProps {
   contractAddress: string;
   abi: ethers.ContractInterface;
+  account:string;
 }
 
-const NFTGallery: React.FC<NFTGalleryProps> = ({ contractAddress, abi }) => {
+const NFTGallery: React.FC<NFTGalleryProps> = ({ contractAddress, abi,account }) => {
   const [nfts, setNfts] = useState<NFT[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -34,7 +35,7 @@ const NFTGallery: React.FC<NFTGalleryProps> = ({ contractAddress, abi }) => {
       const contract = new ethers.Contract(contractAddress, abi, signer);
 
       // Fetch all token IDs from the contract
-      const tokenIds = (await contract.getTokenIds()).map((id: ethers.BigNumber) =>
+      const tokenIds = (await contract.getTokenIds(account)).map((id: ethers.BigNumber) =>
         id.toString()
       );
       // Fetch metadata for each token ID
