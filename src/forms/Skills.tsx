@@ -314,6 +314,7 @@ const Skills = () => {
                   validationStep="skillsVerificationsValidations"
                   setterVerificationObject={setSkillsVerification}
                   verificationStep="skillsVerifications"
+                  skill ={skill}
                 />
                 <FormMessage />
               </FormItem>

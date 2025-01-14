@@ -9,11 +9,21 @@ type EducationType = {
   underGraduateCollege?: string;
   underGraduateDegree?: string;
   underGraduateGPA?: Number;
-  underGraduateDuration?:string;
+  underGraduateDuration?:{
+    duration: {
+      from: string;
+      to: string;
+    };
+  };
   postGraduateCollege?: string;
   postGraduateDegree?: string;
   postGraduateGPA?: Number;
-  postGraduateDuration?:string;
+  postGraduateDuration?:{
+    duration: {
+      from: string;
+      to: string;
+    };
+  };
 };
 
 export type ExperienceObjectType = {

@@ -220,6 +220,8 @@ const AwardFields = ({ index, removeAwardFields, fields }: Props) => {
                   validationStep="awardVerificationsValidations"
                   setterVerificationObject={setAwardVerification}
                   verificationStep="awardVerifications"
+                  awardName={Awards[index].award_name}
+                  awardOrg = {Awards[index].awarding_organization}
                 />
                 <FormMessage />
               </FormItem>

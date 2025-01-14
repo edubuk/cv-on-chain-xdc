@@ -13,7 +13,7 @@ function App() {
     <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="new-cv" element={<Resume />}></Route>
+        <Route path="new-cv/:id" element={<Resume />}></Route>
           <Route element={<PrivateRoute />}>
           <Route path="/create-cv" element={<HomePage />} />
           <Route path="/dashboard" element={<DashBoard />} />

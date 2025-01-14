@@ -100,7 +100,7 @@ const DashBoard = () => {
         </>
 }
         </div>
-        <div className="flex justify-center items-center gap-2 h-screen">
+        <div className="flex justify-center items-center gap-2 h-auto p-4">
           {/* {
             !isActiveButton&&<OnChainData docData={docData}/>
           } */}
@@ -108,7 +108,7 @@ const DashBoard = () => {
             isActiveButton&&<CvById cvData={cvData}/>
           }
           {
-            isNFT&&<NFTGallery contractAddress={contractNFTAddress} abi={abiNFT} account={account}/>
+            isNFT&&<NFTGallery contractAddress={contractNFTAddress} abi={abiNFT}/>
           }
         </div>
     </div>

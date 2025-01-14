@@ -14,10 +14,9 @@ interface NFT {
 interface NFTGalleryProps {
   contractAddress: string;
   abi: ethers.ContractInterface;
-  account:String;
 }
 
-const NFTGallery: React.FC<NFTGalleryProps> = ({ contractAddress, abi,account }) => {
+const NFTGallery: React.FC<NFTGalleryProps> = ({ contractAddress, abi }) => {
   const [nfts, setNfts] = useState<NFT[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -26,17 +25,16 @@ const NFTGallery: React.FC<NFTGalleryProps> = ({ contractAddress, abi,account })
     try {
       setLoading(true);
 
-      // Connect to Ethereum using MetaMask
+      // Connect to Ethereum using MetaMask           
       const provider = new ethers.providers.Web3Provider((window as any).ethereum);
       //await provider.send("eth_requestAccounts", []);
       //console.log("account",account[0]);
       const signer = provider.getSigner();
-
       // Connect to the smart contract
       const contract = new ethers.Contract(contractAddress, abi, signer);
 
       // Fetch all token IDs from the contract
-      const tokenIds = (await contract.getTokenIds(account)).map((id: ethers.BigNumber) =>
+      const tokenIds = (await contract.getTokenIds()).map((id: ethers.BigNumber) =>
         id.toString()
       );
       // Fetch metadata for each token ID
@@ -78,36 +76,45 @@ const NFTGallery: React.FC<NFTGalleryProps> = ({ contractAddress, abi,account })
         <p className="text-red-500 text-center text-lg">No NFTs found.</p>
       ) : (
         <div className="flex flex-wrap justify-center items-center gap-4">
-  {nfts.map((nft, i) => (
-    <div
-      key={nft.id}
-      className="relative rounded-lg p-[1px] bg-gradient-to-r from-[#00f2ff] via-[#ff9500] to-[#0000ffb1] shadow-md hover:shadow-lg transition-transform transform hover:scale-105"
-    >
-      <div className="flex flex-col justify-between bg-white items-center border border-gray-300 rounded-lg overflow-hidden h-full">
-        <div className="flex justify-center items-cente w-full h-36">
-          <img
-            src={nft.image}
-            alt={nft.name}
-            className="w-30 h-30 object-contain"
-          />
-        </div>
-        <div className="p-2 w-[280px] text-center">
-          <h2 className="text-lg font-semibold">{nft.name} - {i + 1}</h2>
-          <p className="text-sm text-gray-600 ">{nft.description}</p>
-          <p className="text-sm text-gray-800 font-semibold mt-2">Token ID: {nft.id}</p>
-          {nft?.hash && (
-            <a
-              className="inline-block mt-4 text-sm text-white bg-[#ff7300] px-4 py-2 rounded-full hover:bg-[#006666] transition-all"
-              href={`https://purple-odd-toad-540.mypinata.cloud/ipfs/${nft.hash}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              View Certificate
-            </a>
-          )}
-        </div>
-      </div>
-    </div>
+  {nfts.map((nft) => (
+   <div
+   key={nft.id}
+   className="relative rounded-lg p-[1px] bg-gradient-to-r from-[#00f2ff] via-[#ff9500] to-[#0000ffb1] shadow-md hover:shadow-lg transition-transform transform hover:scale-105 max-w-[400px] mx-auto"
+ >
+   <div className="flex flex-col bg-white border border-gray-300 rounded-lg overflow-hidden">
+     {/* Row: Image and NFT Name */}
+     <div className="flex items-center w-full p-4">
+       <img
+         src={nft.image}
+         alt={nft.name}
+         className="w-24 h-24 object-contain mr-4 flex-shrink-0"
+       />
+       <h2 className="text-lg font-semibold w-full break-words">
+         {nft.name}
+       </h2>
+     </div>
+ 
+     {/* Column: Description and Button */}
+     <div className="flex flex-col items-center p-4 text-center">
+       <p className="text-sm text-gray-600 mb-2 overflow-hidden text-ellipsis w-full line-clamp-3">
+         {nft.description}
+       </p>
+       <p className="text-sm text-gray-800 font-semibold mt-2">Token ID: {nft.id}</p>
+       {nft?.hash && (
+         <a
+           className="inline-block mt-4 text-sm text-white bg-[#ff7300] px-4 py-2 rounded-full hover:bg-[#006666] transition-all w-fit"
+           href={`https://purple-odd-toad-540.mypinata.cloud/ipfs/${nft.hash}`}
+           target="_blank"
+           rel="noopener noreferrer"
+         >
+           View Certificate
+         </a>
+       )}
+     </div>
+   </div>
+ </div>
+ 
+ 
   ))}
 </div>
 

@@ -211,6 +211,8 @@ const CourseFields = ({ index, removeCourseFields, fields }: Props) => {
                   validationStep="courseVerificationsValidations"
                   setterVerificationObject={setCourseVerification}
                   verificationStep="courseVerifications"
+                  courseName={Courses[index].course_name}
+                  courseOrg={Courses[index].organization}
                 />
                 <FormMessage />
               </FormItem>

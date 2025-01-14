@@ -52,6 +52,13 @@ export function AnimatedVerification({
   validationStep,
   // verificationObject,
   setterVerificationObject,
+  jobRole,
+  companyName,
+  skill,
+  awardName,
+  awardOrg,
+  courseName,
+  courseOrg,
 }: {
   className?: string;
   firstButtonText: string;
@@ -69,6 +76,13 @@ export function AnimatedVerification({
     };
   };
   setterVerificationObject: React.Dispatch<React.SetStateAction<any>>;
+  jobRole?:string;
+  companyName?:string;
+  skill?:string;
+  awardName?:string;
+  awardOrg?:string;
+  courseName?:string;
+  courseOrg?:string;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   // const div1Ref = useRef<HTMLDivElement>(null);
@@ -89,7 +103,7 @@ export function AnimatedVerification({
   const [openMailDialog, setOpenMailDialog] = useState<boolean>(false);
   // Safely check if the verificationObject contains the field
   // const verificationData = verificationObject[field] || {};
-  console.log(storedVerifications[field], "checking the verification status");
+  console.log(companyName,jobRole, "company name and job role");
   const verificationData = storedVerifications[field] || {};
   console.log(files);
   // console.log("form object", getValues());
@@ -117,7 +131,29 @@ export function AnimatedVerification({
     const proofArray: string[] = [];
     const hashArray: string[] = [];
   
-    const {metaDataHash,docHash} = await uploadToIpfs(files[0],setIsUploading);
+    let metaDataHash,docHash;
+    const userName= localStorage.getItem("userName");
+    switch(verificationStep)
+    {
+      case "experienceVerifications":
+        const userData1 = `completing ${jobRole} job by ${userName} at ${companyName}`;
+        ({ metaDataHash, docHash } = await uploadToIpfs(files[0], setIsUploading,userData1));
+        break;
+
+      case "skillsVerifications":
+        const userData2 = `completing ${skill} skill by ${userName}`;
+        ({ metaDataHash, docHash } = await uploadToIpfs(files[0], setIsUploading,userData2));
+        break;
+
+      case "awardVerifications":
+        const userData3 = `receiving ${awardName} certificate by ${userName} at ${awardOrg}`;
+        ({ metaDataHash, docHash } = await uploadToIpfs(files[0], setIsUploading,userData3));
+        break;
+      case "courseVerifications":
+        const userData4 = `completing ${courseName} course by ${userName} at ${courseOrg}`;
+        ({ metaDataHash, docHash } = await uploadToIpfs(files[0], setIsUploading,userData4));
+        break;
+    }
     console.log("metaData and docHash",metaDataHash,docHash);
     if(docHash)
       {
@@ -128,7 +164,7 @@ export function AnimatedVerification({
           verificationStep === "courseVerifications"
         ) {
           hashArray.push(metaDataHash as string);
-        
+          console.log("verification data : ",verificationData)
           // Retrieve existing hashArray from localStorage
           let data = localStorage.getItem("hashArray");
         

@@ -18,13 +18,20 @@ const CvOutputPage = () => {
   const { cvData, isLoading } = useGetCv(id);
   console.log(cvData);
   if (isLoading) {
-    return <h1>Loading</h1>;
+    return(
+    <div className="flex justify-center items-center">
+      <h1 className="text-4xl font-bold text-[#006666]">Loading</h1>
+    </div>
+    );
   }
 
   if (!cvData) {
-    return <h1>No cv found</h1>;
+    return(
+      <div className="flex justify-center items-center">
+        <h1 className="text-4xl font-bold text-[#006666]">No CV Found</h1>
+      </div>
+      );
   }
-  console.log(cvData.experienceVerifications);
   return (
     <div className="px-1 mt-5 md:mt-0 md:px-10 mb-10 overflow-hidden">
       {/* <div className="border flex">
@@ -113,14 +120,16 @@ const CvOutputPage = () => {
                         fillcheckClass="mt-1"
                         linkClass="text-[#FB980E] font-semibold text-md mt-2"
                       />
-                      <div className="flex justify-end text-nowrap">
-                        <span className="font-normal text-sm">
-                          - Degree ({cvData.education.postGraduateDegree})
-                        </span>
-                        <span className="font-normal text-sm">
-                          , GPA{" "}
-                          {JSON.stringify(cvData.education.postGraduateGPA)}
-                        </span>
+                      <div className="flex flex-col justify-end text-wrap">
+                        <p className="font-normal text-sm">
+                        <strong>Degree: </strong> <i>({cvData.education.postGraduateDegree})</i>
+                        </p>
+                        <p>
+                        <strong>GPA:</strong> <i>{JSON.stringify(cvData.education.postGraduateGPA)}</i>
+                        </p>
+                        <p className="font-normal text-sm">
+                          <i>{cvData.education.postGraduateDuration?.duration.from}</i> - <i>{cvData.education.postGraduateDuration?.duration.to}</i>
+                        </p>
                       </div>
                     </div>
                   )}
@@ -145,14 +154,16 @@ const CvOutputPage = () => {
                         fillcheckClass="mt-2"
                         linkClass="text-[#FB980E] font-semibold text-md mt-2"
                       />
-                      <div className="flex justify-end text-nowrap">
-                        <span className="font-normal text-sm">
-                          - Degree ({cvData.education.underGraduateDegree})
-                        </span>
-                        <span className="font-normal text-sm">
-                          , GPA{" "}
-                          {JSON.stringify(cvData.education.underGraduateGPA)}
-                        </span>
+                      <div className="flex flex-col justify-end text-wrap">
+                        <p className="font-normal text-sm">
+                        <strong>Degree: </strong> <i>({cvData.education.underGraduateDegree})</i>
+                        </p>
+                        <p>
+                        <strong>GPA:</strong> <i>{JSON.stringify(cvData.education.underGraduateGPA)}</i>
+                        </p>
+                        <p className="font-normal text-sm">
+                          <i>{cvData.education.underGraduateDuration?.duration.from}</i> - <i>{cvData.education.underGraduateDuration?.duration.to}</i>
+                        </p>
                       </div>
                     </div>
                   )}
