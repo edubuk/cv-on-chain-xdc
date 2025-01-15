@@ -59,6 +59,12 @@ export function AnimatedVerification({
   awardOrg,
   courseName,
   courseOrg,
+  underGraduateCollegeName,
+  postGraduateCollegeName,
+  class10SchoolName,
+  class12CollegeName,
+  underGraduateDegreeName,
+  postGraduateDegreeName,
 }: {
   className?: string;
   firstButtonText: string;
@@ -83,6 +89,12 @@ export function AnimatedVerification({
   awardOrg?:string;
   courseName?:string;
   courseOrg?:string;
+  class12CollegeName?:string;
+  class10SchoolName?:string;
+  underGraduateCollegeName?:string;
+  postGraduateCollegeName?:string;
+  underGraduateDegreeName?:string;
+  postGraduateDegreeName?:string;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   // const div1Ref = useRef<HTMLDivElement>(null);
@@ -103,9 +115,9 @@ export function AnimatedVerification({
   const [openMailDialog, setOpenMailDialog] = useState<boolean>(false);
   // Safely check if the verificationObject contains the field
   // const verificationData = verificationObject[field] || {};
-  console.log(companyName,jobRole, "company name and job role");
+  console.log(field==="class10");
   const verificationData = storedVerifications[field] || {};
-  console.log(files);
+  //console.log(files);
   // console.log("form object", getValues());
   const formObject = getValues();
   useEffect(() => {
@@ -132,9 +144,31 @@ export function AnimatedVerification({
     const hashArray: string[] = [];
   
     let metaDataHash,docHash;
-    const userName= localStorage.getItem("userName");
+    const userName = localStorage.getItem("userName");
     switch(verificationStep)
     {
+      case "educationVerifications":
+        if(field==="class10")
+        {
+          const eduUserData1 = `completing ${firstButtonText} by ${userName} from ${class10SchoolName}`;
+        ({ metaDataHash, docHash } = await uploadToIpfs(files[0], setIsUploading,eduUserData1));
+        }
+        else if(field==="class12")
+        {
+          const eduUserData1 = `completing ${firstButtonText} by ${userName} from ${class12CollegeName}`;
+        ({ metaDataHash, docHash } = await uploadToIpfs(files[0], setIsUploading,eduUserData1));
+        }
+        else if(field==="undergraduation")
+        {
+          const eduUserData1 = `completing ${underGraduateDegreeName} by ${userName} from ${underGraduateCollegeName}`;
+        ({ metaDataHash, docHash } = await uploadToIpfs(files[0], setIsUploading,eduUserData1));
+        }
+        else if(field==="postgraduation")
+        {
+          const eduUserData1 = `completing ${postGraduateDegreeName} by ${userName} from ${postGraduateCollegeName}`;
+        ({ metaDataHash, docHash } = await uploadToIpfs(files[0], setIsUploading,eduUserData1));
+        }
+        break;
       case "experienceVerifications":
         const userData1 = `completing ${jobRole} job by ${userName} at ${companyName}`;
         ({ metaDataHash, docHash } = await uploadToIpfs(files[0], setIsUploading,userData1));
@@ -158,6 +192,7 @@ export function AnimatedVerification({
     if(docHash)
       {
         if (
+          verificationStep === "educationVerifications" ||
           verificationStep === "experienceVerifications" ||
           verificationStep === "skillsVerifications" ||
           verificationStep === "awardVerifications" ||

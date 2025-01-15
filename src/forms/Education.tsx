@@ -40,7 +40,9 @@ const Education = ({
   );
   const { educationVerifications, setEducationVerifications } =
     useCvFromContext();
-  const { educationVerificationValidations: storedVerifications } = getValues();
+  const {class10SchoolName,class12CollegeName,underGraduateCollegeName,
+    postGraduateCollegeName,underGraduateDegreeName,
+    postGraduateDegreeName, educationVerificationValidations: storedVerifications } = getValues();
   console.log(getValues());
 
 
@@ -150,7 +152,10 @@ const Education = ({
                 <FormItem className="flex-1">
                   <FormLabel>Class 10th school name</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter 10th school name" {...field} />
+                    <Input 
+                    placeholder="Enter 10th school name" {...field}
+                    
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -208,6 +213,7 @@ const Education = ({
                     validationStep="educationVerificationValidations"
                     verificationObject={educationVerifications}
                     setterVerificationObject={setEducationVerifications}
+                    class10SchoolName={class10SchoolName}
                   />
                   <FormMessage />
                 </FormItem>
@@ -290,6 +296,7 @@ const Education = ({
                         validationStep="educationVerificationValidations"
                         verificationObject={educationVerifications}
                         setterVerificationObject={setEducationVerifications}
+                        class12CollegeName={class12CollegeName}
                       />
                       <FormMessage />
                     </FormItem>
@@ -404,6 +411,8 @@ const Education = ({
                           validationStep="educationVerificationValidations"
                           verificationObject={educationVerifications}
                           setterVerificationObject={setEducationVerifications}
+                          underGraduateCollegeName={underGraduateCollegeName}
+                          underGraduateDegreeName={underGraduateDegreeName}
                         />
                         <FormMessage />
                       </FormItem>
@@ -545,6 +554,8 @@ const Education = ({
                           validationStep="educationVerificationValidations"
                           verificationObject={educationVerifications}
                           setterVerificationObject={setEducationVerifications}
+                          postGraduateCollegeName={postGraduateCollegeName}
+                          postGraduateDegreeName={postGraduateDegreeName}
                         />
                         <FormMessage />
                       </FormItem>
