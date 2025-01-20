@@ -598,7 +598,7 @@ const CvForm = () => {
 ) : (
   <div className="flex gap-2 w-full flex-col sm:flex-row">
     {
-    step===6&&localStorage.getItem("txStatus")&&
+    step===6&&
     <Button
       type="button"
       onClick={stepsHandler}
@@ -612,7 +612,7 @@ const CvForm = () => {
       {step === 6 ? "Submit" : "Save and next"}
     </Button>
     }
-    {step!==6&&
+    {step!==6&&localStorage.getItem("txStatus")&&
       <Button
       type="button"
       onClick={stepsHandler}

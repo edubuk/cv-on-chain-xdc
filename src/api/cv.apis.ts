@@ -35,6 +35,7 @@ export const useCV = () => {
         const { _id: id } = data;
         navigate(`/cv/${id}`);
         localStorage.clear();
+        window.location.reload();
       }
     },
   });
