@@ -30,7 +30,7 @@ const PaymentPopup: React.FC<Props> = ({ showPopup, setShowPopup }) => {
       setLoading(true);
       const orderRes = await axios.post(
         `${API_BASE_URL}/cv/checkout`,
-        { amount: 1 * 100 }, // Send amount in paise
+        { amount: amount * 100 }, // Send amount in paise
         { headers: { 
           "Content-Type": "application/json",
         } }
@@ -39,7 +39,7 @@ const PaymentPopup: React.FC<Props> = ({ showPopup, setShowPopup }) => {
       if (orderRes.data.success) {
         const options = {
           key: import.meta.env.VITE_Rz_Key,
-          amount: 1* 100,
+          amount: amount* 100,
           currency: "INR",
           name: "Edubuk (Eduprovince Technologies Private Limited)",
           description: "Order-123",

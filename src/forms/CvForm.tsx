@@ -63,7 +63,6 @@ const CvForm = () => {
   const [formData, setFormData] = useState<FormData>(new FormData());
   const [txHash, setTxHash] = useState<string | null>(null);
   const [showPopup, setShowPopup] = useState<boolean>(false);
-  const [loading,setLoading] = useState<boolean>(false);
   const [paymentStatus, setPaymentStatus] = useState<boolean>(true);
   const [txStarted, setTxStarted] = useState<boolean>(false);
 
