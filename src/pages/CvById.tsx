@@ -1,5 +1,5 @@
 import React from "react";
-
+import { API_BASE_URL } from "@/main";
 interface CvByIdProps {
   cvData: string[]; // Expecting an array of strings as cvData
 }
@@ -16,7 +16,7 @@ const CvById: React.FC<CvByIdProps> = ({ cvData }) => {
             CV <strong>{i + 1}</strong>
           </h1>
           <a
-            href={`https://www.edubukcvonchain.org/cv/${doc}`}
+            href={`${API_BASE_URL}/cv/${doc}`}
             className="border border-slate-400 text-[#006666] py-2 px-4 rounded-md hover:text-yellow-700 text-center"
           >
             View CV
