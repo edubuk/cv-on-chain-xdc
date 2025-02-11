@@ -15,11 +15,13 @@ import ProfileSummary from "./ProfileSummary";
 import { useCV } from "@/api/cv.apis";
 import LoadingButton from "@/components/LoadingButton";
 //import dayjs from "dayjs";
+import { API_BASE_URL } from "@/main";
 import { nanoid } from "nanoid";
 import { connectWallet, getNFTContract } from "@/api/contract.api";
 import toast from "react-hot-toast";
 import { formSchema } from "@/components/FormSchema/cvSchema";
-
+import PaymentPopup from '../paymentGateway/razorpay'
+import axios from "axios";
 // .refine((data) => data.imageFile || data.imageUrl, {
 //   message: "Either imageFile or imageUrl is required",
 //   path: ["imageFile"],
@@ -60,6 +62,11 @@ const CvForm = () => {
   const [isImageUploading, setIsImageUploading] = useState<boolean>(false);
   const [formData, setFormData] = useState<FormData>(new FormData());
   const [txHash, setTxHash] = useState<string | null>(null);
+  const [showPopup, setShowPopup] = useState<boolean>(false);
+  const [loading,setLoading] = useState<boolean>(false);
+  const [paymentStatus, setPaymentStatus] = useState<boolean>(true);
+  const [txStarted, setTxStarted] = useState<boolean>(false);
+
   //const [account,setAccount] = useState<string | null>(null);
   // trying to set nanoId in localStorage;
   useEffect(() => {
@@ -68,7 +75,25 @@ const CvForm = () => {
     if (!storedNanoId) {
       localStorage.setItem("nanoId", nanoId);
     }
-  }, []);
+    const paymentId = localStorage.getItem("paymentId");
+    const checkStatus= async()=>{
+      console.log("payment id ",paymentId);
+      try {
+        const paymentStatus = await axios.get(`${API_BASE_URL}/cv/check_cv_status/${paymentId}`);
+        if(paymentStatus.data.success)
+        {
+          setPaymentStatus(paymentStatus.data.value);
+          console.log(paymentStatus)
+        }
+      } catch (error) {
+        console.log("error while checking payment status",error)
+      }
+    }
+    if(paymentId)
+    {
+      checkStatus();
+    }
+  }, [showPopup]);
 
   const [selectedQualification, setSelectedQualification] = useState<string>(
     () => {
@@ -488,8 +513,9 @@ const CvForm = () => {
   // certificates registration on chain
   const mintNFT = async () => {
     const id =toast.loading("registration initiated. Please wait...");
-     
+    
     try {
+      setTxStarted(true);
       const hashArray: string[] = JSON.parse(
         localStorage.getItem("hashArray") || "[]"
       );
@@ -504,11 +530,13 @@ const CvForm = () => {
         localStorage.setItem("txStatus","success");
         toast.dismiss(id);
         toast.success("certificate registered successfully");
+        setTxStarted(false);
       }
     } catch (err) {
       toast.dismiss(id);
       console.log("error", err);
       toast.error("something went wrong");
+      setTxStarted(false);
     }
   };
 
@@ -549,6 +577,7 @@ const CvForm = () => {
   }
 
   return (
+    <>
     <div>
     <Form {...form}>
       <form
@@ -598,7 +627,7 @@ const CvForm = () => {
 ) : (
   <div className="flex gap-2 w-full flex-col sm:flex-row">
     {
-    step===6&&
+    step===6&&!paymentStatus&&localStorage.getItem("txStatus")&&
     <Button
       type="button"
       onClick={stepsHandler}
@@ -612,7 +641,7 @@ const CvForm = () => {
       {step === 6 ? "Submit" : "Save and next"}
     </Button>
     }
-    {step!==6&&localStorage.getItem("txStatus")&&
+    {step!==6&&
       <Button
       type="button"
       onClick={stepsHandler}
@@ -627,41 +656,61 @@ const CvForm = () => {
     </Button>
     }
     {step !== 6 ? (
-      <Button
-        type="button"
-        onClick={() => resetPageHandler(step)}
-        className="w-auto sm:w-full mt-2 sm:mt-0 "
-      >
-        Reset
-      </Button>):
-       ( !txHash ? (
-        !account?
-          <Button type="button" onClick={getAccount} className="w-auto sm:w-full active:translate-y-2">
-            Connect 
-            Wallet
-          </Button>:
-          <Button type="button" onClick={mintNFT} className="w-auto sm:w-full active:translate-y-2">
-            Register Your CV on Blockchain
-          </Button>
-        ) : (
-          <div className="flex justify-center items-center w-auto sm:w-full">
-            <a
-              className="w-full px-2 py-1 text-center items-center border rounded hover:bg-[#f8f9fa] font-semibold hover:opacity-90"
-              href={`https://xdcscan.com/tx/${txHash}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              View Transaction
-            </a>
-          </div>
-        )
-    )}
-  </div>
-)}
+        <Button
+          type="button"
+          onClick={() => resetPageHandler(step)}
+          className="w-auto sm:w-full mt-2 sm:mt-0 "
+        >
+          Reset
+        </Button>):
+         !paymentStatus?( !txHash ? (account?
+          <Button
+          disabled={txStarted}
+          type="button"
+          onClick={mintNFT}
+          className={`w-auto sm:w-full active:translate-y-2 ${
+            txStarted ? "cursor-not-allowed opacity-50" : "cursor-pointer"
+          }`}
+        >
+          Register Your CV on Blockchain
+        </Button>:
+          <Button
+          type="button"
+          onClick={getAccount}
+          className="w-auto sm:w-full active:translate-y-2 "
+        >
+          Connect Wallet
+        </Button>
+          ) : (
+            <div className="flex justify-center items-center w-auto sm:w-full">
+              <a
+                className="w-full px-2 py-1 text-center items-center border rounded hover:bg-[#f8f9fa] font-semibold hover:opacity-90"
+                href={`https://xdcscan.com/tx/${txHash}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                View Transaction
+              </a>
+            </div>
+          )
+      ):<Button
+      disabled={txStarted}
+      type="button"
+      onClick={()=>setShowPopup(true)}
+      className="w-auto sm:w-full active:translate-y-2"
+    >
+      Register Your CV on Blockchain
+    </Button>}
+    </div>
+  )}
 </div>
       </form>
     </Form>
   </div>
+      {showPopup&&
+        <PaymentPopup showPopup={showPopup} setShowPopup={setShowPopup}/>
+    }
+    </>
   );
 };
 

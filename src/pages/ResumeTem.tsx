@@ -32,7 +32,7 @@ const Resume: React.FC = () => {
   if (isLoading) {
     return(
     <div className="flex justify-center items-center">
-      <h1 className="text-4xl font-bold text-[#006666]">Loading</h1>
+      <h1 className="text-4xl font-bold text-[#006666]">Loading...</h1>
     </div>
     );
   }
